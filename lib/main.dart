@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Import the new screen files
 import 'phone_auth_screen.dart';
 import 'otp_verify_screen.dart';
 import 'home_screen.dart';
 
 void main() async {
-  // Ensure Flutter is ready before we check for login status
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Check login status using shared preferences
   final prefs = await SharedPreferences.getInstance();
   final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  // Choose the initial route based on the login status
   final String initialRoute = isLoggedIn ? '/home' : '/';
 
   runApp(MyApp(initialRoute: initialRoute));
@@ -23,28 +19,38 @@ void main() async {
 class MyApp extends StatelessWidget {
   final String initialRoute;
 
-  // Update constructor to accept the initial route
   const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter OTP Auth',
+      title: 'Zolo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        brightness: Brightness.dark, // Dark theme for a modern look
-        scaffoldBackgroundColor: const Color(0xFF121212),
+        brightness: Brightness.light, // Set the theme to light
+        scaffoldBackgroundColor: Colors.grey[100], // Match the dashboard background
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF1E1E1E),
+          backgroundColor: Colors.white,
+          elevation: 1.0,
+          iconTheme: IconThemeData(color: Colors.black54),
+          titleTextStyle: TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: const Color(0xFF2A2A2A),
+          fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(color: Colors.grey.shade300),
           ),
-          hintStyle: TextStyle(color: Colors.grey[600]),
+          enabledBorder: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(10.0),
+             borderSide: BorderSide(color: Colors.grey.shade300),
+          ),
+          focusedBorder: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(10.0),
+             borderSide: BorderSide(color: Colors.blueAccent, width: 1.5),
+          ),
+          hintStyle: TextStyle(color: Colors.grey[500]),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -52,19 +58,24 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(10.0),
             ),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
           ),
         ),
+        cardTheme: CardTheme(
+          elevation: 1,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        )
       ),
-      // Use the dynamically set initial route
       initialRoute: initialRoute,
       routes: {
         '/': (context) => const PhoneAuthScreen(),
         '/verify': (context) => const OtpVerifyScreen(),
         '/home': (context) => const HomeScreen(),
       },
-      debugShowCheckedModeBanner: false, // Hides the debug banner
+      debugShowCheckedModeBanner: false,
     );
   }
 }
